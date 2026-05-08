@@ -9,6 +9,7 @@ from .enrich import enrich_event
 from .parse import parse_line
 from .alert import emit_event
 from .detect import detect_bruteforce
+from .detect import detect_spray
 
 def read_head(path: str, lines: int = 50) -> None:
     """Print the first N lines to verify we can read the file."""
@@ -34,7 +35,7 @@ def tail(path: str,
     """Follow the file and process new lines. Handles rotation/truncation."""
     json_handle: TextIO | None = open(json_out, "a", encoding="utf-8") if json_out else None
     windows: "defaultdict[str, deque[float]]" = defaultdict(lambda: deque(maxlen=1024))
-
+    spray_users: "defaultdict[str, deque[tuple[float, str]]]" = defaultdict(lambda: deque(maxlen=1024))
     try:
         with open(path, "r", encoding="utf-8", errors="replace") as f:
             f.seek(0, os.SEEK_END)
@@ -60,11 +61,13 @@ def tail(path: str,
                     continue
 
                 ev = parse_line(line)
+            
                 if ev:
                     ev = enrich_event(ev)  # <-- add enrichment here
                     emit_event(ev, json_handle)
                     if detect:
                         detect_bruteforce(ev, windows, threshold, window_sec, json_handle)
+                        detect_spray(ev, spray_users, 5, 60, json_handle)
 
 
     except KeyboardInterrupt:
