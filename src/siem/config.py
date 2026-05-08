@@ -9,3 +9,7 @@ def load_config(path: str) -> dict:
 def ip_in_allowlist(ip: str, cidrs: list[str]) -> bool:
     addr = ipaddress.ip_address(ip)
     return any(addr in ipaddress.ip_network(c) for c in cidrs)
+def save_config(cfg: dict, path: str) -> None:
+    p = Path(path)
+    with p.open("w", encoding="utf-8") as f:
+        yaml.safe_dump(cfg, f)
