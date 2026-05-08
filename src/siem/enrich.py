@@ -18,7 +18,7 @@ def classify_ip(addr: str) -> str:
     if ip.is_private:
         return "private"
     if ip.is_loopback:
-        return "loopback"
+        return "loopback address"
     if ip.is_link_local:
         return "link_local"
     if ip.is_reserved or ip.is_multicast or ip.is_unspecified:
