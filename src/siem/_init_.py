@@ -1,1 +1,1 @@
-_all_ = ["cli", "io", "parse", "detect", "alert"]
+__all__ = ["cli", "io", "parse", "detect", "alert"]
