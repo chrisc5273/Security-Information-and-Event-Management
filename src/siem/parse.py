@@ -32,6 +32,7 @@ def parse_line(line: str) -> dict | None:
             "service": "ssh",
             "user": m.group("user"),
             "src_ip": m.group("ip"),
+            "allow_list": ["192.168.0.71"],  # Placeholder for future use
             "raw_ts": m.group("ts"),
             "ingest_ts": now_iso(),
             "raw": line.rstrip("\n"),
