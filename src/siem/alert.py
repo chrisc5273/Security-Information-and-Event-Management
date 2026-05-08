@@ -8,7 +8,7 @@ def emit_event(ev: dict, json_out_handle: TextIO | None) -> None:
     u = ev.get("user", "?")
     ts = ev.get("raw_ts", "?")
     ipcls = ev.get("src_ip_class")
-    cls_suffix = f" class={ipcls}" if ipcls else ""
+    cls_suffix = f" class={ipcls}" if ipcls else "an unknown class"
 
 
     if ev["type"] == "AUTH_FAIL":
